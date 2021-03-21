@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-context</artifactId>
+            <artifactId>spring-cloud-function-adapter-aws</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.experimental</groupId>
@@ -68,12 +68,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
-                    <image>
-                        <builder>paketobuildpacks/builder:tiny</builder>
-                        <env>
-                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
-                        </env>
-                    </image>
+                    <classifier>exec</classifier>
                 </configuration>
             </plugin>
             <plugin>
@@ -97,6 +92,38 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>native-image</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.nativeimage</groupId>
+                        <artifactId>native-image-maven-plugin</artifactId>
+                        <version>21.0.0</version>
+                        <configuration>
+                            <!-- The native image build needs to know the entry point to your application -->
+                            <mainClass>com.myexample.serverless.awsapigw.SpringAwsApigwNativeSampleApplication</mainClass>
+                            <imageName>SpringAwsApigwNativeSampleApplication</imageName>
+                            <buildArgs>
+                                --enable-http --enable-https
+                            </buildArgs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>native-image</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>spring-snapshots</id>
