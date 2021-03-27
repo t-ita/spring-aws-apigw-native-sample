@@ -13,6 +13,7 @@
     
 ## pom.xml の編集
 
+* `spring-boot-starter` を `spring-boot-starter-webflux` に変更
 * `spring-cloud-function-context` を `spring-cloud-function-web` に変更
 * `spring-cloud-function-adapter-aws` を dependencies に追加
 * Native Image 化に Build Pack を使わないので、`spring-boot-maven-plugin` から build pack の記述をはずす
@@ -69,8 +70,18 @@ docker run -v "$(pwd)":/work/build -p 8080:8080 --rm -it awslambda-native-builde
 ./target/SpringAwsApigwNativeSampleApplication
 ```
 
+別ターミナルから下記コマンドを投げる
 
+```
+curl -H "Content-Type: application/json" localhost:8080/greeting -d '{"body": "{\"name\": \"t-ita\",\"message\": \"Hello\"}"}'
+```
 
+結果。Messaege.getPayload() がうまく処理出来ておらず、name / message に null が入ってくる
 
+```
+{"message":"null,null","name":"Spring Cloud Function Native"}%
+```
+
+Spring Cloud のバージョン 2020.0.2 だと上手くいかない？
 
 
