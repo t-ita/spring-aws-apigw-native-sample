@@ -24,7 +24,7 @@ public class FunctionConfig {
     @Bean
     public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> greeting() {
         return requestEvent -> {
-            APIGatewayProxyResponseEvent responseEvent = null;
+            APIGatewayProxyResponseEvent responseEvent;
             try {
                 ObjectMapper mapper = new ObjectMapper();
 

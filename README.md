@@ -84,4 +84,8 @@ curl -H "Content-Type: application/json" localhost:8080/greeting -d '{"body": "{
 
 Spring Cloud のバージョン 2020.0.2 だと上手くいかない？
 
+GitHub でコードを確認したところ、2020.0.1 以降で、Message を変換する部分に修正がはいっており、その影響で AWS Adapter が上手く動作していないように見える。
 
+苦肉の策として、APIGatewayProxyRequestEvent から直接 body を取得して、ObjectMapper で変換する方法をとる。
+
+Native Image 化して実行するも、APIGatewyProxyRequestEvent に値が入ってこない
